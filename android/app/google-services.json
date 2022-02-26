@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "681632638678",
+    "project_id": "app-perso-c2a3d",
+    "storage_bucket": "app-perso-c2a3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681632638678:android:a0c5231b1ad6d7861a8b77",
+        "android_client_info": {
+          "package_name": "com.budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681632638678-91seff9bn80af73jvovprqskoncl461d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl4Lzh20d_pq3itcM_5ywEer2YN7kQOSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681632638678-91seff9bn80af73jvovprqskoncl461d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681632638678:android:010984d0a4559d751a8b77",
+        "android_client_info": {
+          "package_name": "com.cook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681632638678-91seff9bn80af73jvovprqskoncl461d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl4Lzh20d_pq3itcM_5ywEer2YN7kQOSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681632638678-91seff9bn80af73jvovprqskoncl461d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
