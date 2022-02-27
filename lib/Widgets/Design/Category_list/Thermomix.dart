@@ -161,16 +161,16 @@ class _ThermomixListState extends State<ThermomixList> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 10),
                         SizedBox(
-                            width: size.width -190,
+                            width: size.width -130,
                             child: Text(data.name, style: GoogleFonts.poppins( textStyle: const TextStyle(color: black, fontSize: 16,letterSpacing: 1,fontWeight: FontWeight.w400, decoration: TextDecoration.none)),overflow: TextOverflow.ellipsis)),
                         const SizedBox(height: 5),
                         Row(
                           children: [
-                            const Icon(Ionicons.reader_outline, color: primary,size: 16),
+                            const Icon(Ionicons.person_outline, color: primary,size: 16),
                             const SizedBox(width: 10),
-                            Text(data.categorie,
+                            Text(data.auteur,
                               style: GoogleFonts.poppins( textStyle: const TextStyle(color: black,fontSize: 13,letterSpacing: 1,decoration: TextDecoration.none)),),
                           ],
                         ),

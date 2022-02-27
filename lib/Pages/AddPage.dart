@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cook/Models/recette.dart';
 import 'package:cook/Pages/HomePage.dart';
@@ -11,13 +10,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:form_builder_image_picker/form_builder_image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 
 class AddPage extends StatefulWidget {
@@ -66,7 +62,7 @@ class _AddPageState extends State<AddPage> {
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
+      final image = await ImagePicker().pickImage(source: source,imageQuality: 85, maxHeight:  400 , maxWidth: 400);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() => this.image = imageTemporary);
@@ -117,7 +113,7 @@ class _AddPageState extends State<AddPage> {
             userID:  userID!,
             ingredients: (_ingredients.isNotEmpty) ? _ingredients : [],
             date: DateTime.now(),
-            name:  (nameController.text.isNotEmpty) ? nameController.text : "",
+            name:  nameController.text.toLowerCase(),
             time: (timeController.text.isNotEmpty) ? timeController.text : "0",
             auteur: userName!,
             imageURL: downloadURL!,
@@ -199,9 +195,21 @@ class _AddPageState extends State<AddPage> {
 
   Widget buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 5,
-      title: Text('CookBook', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+        backgroundColor: Colors.white,
+        elevation: 3,
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 250),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 35, child: Image.asset('assets/images/logobar.png')),
+              const SizedBox(width: 5),
+              Text('Cook', style: GoogleFonts.oswald( textStyle: const TextStyle(color: black, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+              const SizedBox(width: 2),
+              Text('Book', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+            ],
+          ),
+        )
     );
   }
   Widget buildImageRecette() {

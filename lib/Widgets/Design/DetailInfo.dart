@@ -110,7 +110,9 @@ class _DetailInfoState extends State<DetailInfo> {
         const SizedBox(height: 10,),
         Divider(color: Colors.black.withOpacity(0.3),),
 
-        Expanded(child: DefaultTabController(
+        Expanded(child:
+
+        DefaultTabController(
           length: 3,
           initialIndex: 0,
           child: Column(

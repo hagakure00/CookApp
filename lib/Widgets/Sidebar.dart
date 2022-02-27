@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cook/Pages/AddPage.dart';
 import 'package:cook/Pages/CategoriePage.dart';
 import 'package:cook/Pages/HomePage.dart';
@@ -8,14 +5,8 @@ import 'package:cook/Pages/SearchPage.dart';
 import 'package:cook/Pages/UserPage.dart';
 import 'package:cook/Theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:ionicons/ionicons.dart';
 import '../main.dart';
 
 
@@ -32,43 +23,6 @@ class _SidebarState extends State<Sidebar> {
 
 
   final user = FirebaseAuth.instance.currentUser!;
-
-  File? image;
-  String? downloadURL;
-
-  Future pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
-    } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print('Image non trouvé : $e');
-      }
-    }
-    uploadImage();
-  }
-  Future uploadImage() async {
-    final user = FirebaseAuth.instance.currentUser!;
-    // message de validation
-    const message = 'Photo changé avec succes ! Mise a jour dans un instant';
-    const snackBar = SnackBar(
-        content: Text(message, style: TextStyle(fontSize: 14),
-        ), backgroundColor: Colors.green);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-      FirebaseStorage.instance.ref().child('UserRecette').child(user.uid).delete();
-    // upload image to storage
-    Reference ref = FirebaseStorage.instance.ref().child('UserRecette').child(user.uid);
-    await ref.putFile(image!);
-    // recuperer url
-    downloadURL = await ref.getDownloadURL();
-    await FirebaseFirestore.instance.collection('UserRecette').doc(user.uid).update({
-      'photoURL': downloadURL
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +53,14 @@ class _SidebarState extends State<Sidebar> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Icons.home_outlined,size:28, color: primary),
+                      SizedBox(
+                        height: 30,
+                          width: 30,
+                          child: Image.asset('assets/images/home.png')),
                       const SizedBox(width: 10),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5),
-                        child: Text("Home", style: GoogleFonts.poppins(textStyle: const TextStyle(color: black,fontSize: 16,fontWeight: FontWeight.w500, letterSpacing: 0.5,height: 1,decoration: TextDecoration.none))),
+                        child: Text("Accueil", style: GoogleFonts.poppins(textStyle: const TextStyle(color: black,fontSize: 16,fontWeight: FontWeight.w500, letterSpacing: 0.5,height: 1,decoration: TextDecoration.none))),
                       ),
                     ],
                   ),
@@ -117,7 +74,10 @@ class _SidebarState extends State<Sidebar> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Ionicons.reader_outline,size:28, color: primary),
+                      SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset('assets/images/category.png')),
                       const SizedBox(width: 10),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -135,7 +95,10 @@ class _SidebarState extends State<Sidebar> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Ionicons.person,size:28, color: primary),
+                      SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset('assets/images/user.png')),
                       const SizedBox(width: 10),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -153,7 +116,10 @@ class _SidebarState extends State<Sidebar> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Icons.add_circle,size:28, color: primary),
+                      SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset('assets/images/add.png')),
                       const SizedBox(width: 10),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -172,7 +138,10 @@ class _SidebarState extends State<Sidebar> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Icons.search,size:28, color: primary),
+                      SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset('assets/images/search.png')),
                       const SizedBox(width: 10),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -185,72 +154,7 @@ class _SidebarState extends State<Sidebar> {
 
 
               const Spacer(),
-              FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                future: FirebaseFirestore.instance.collection('UserRecette').doc(user.uid).get(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) return Text ('Error = ${snapshot.error}');
 
-                  if (snapshot.hasData) {
-                    var data = snapshot.data!.data();
-                    return SizedBox(
-                        height: 100,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20,top: 10),
-                              child: GestureDetector(
-                                onTap:() {
-                                  setState(() {
-                                    pickImage(ImageSource.gallery);
-                                  });
-                                },
-                                child: Stack(
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl:data!['photoURL'],fit: BoxFit.cover,
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: imageProvider, fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                      const SpinKitRipple(color: white, size: 20),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                                    ),
-                                    const Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: Icon(Icons.camera_alt_rounded, color: primary,size: 20))
-                                  ],
-                                )
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 35,left: 10),
-                              child: Column(
-
-                                children: [
-                                  Text(data['name'],
-                                    style: GoogleFonts.poppins( textStyle: const TextStyle(color: black,fontSize: 13,letterSpacing: 1,decoration: TextDecoration.none)),),
-                                  const SizedBox(height: 5),
-                                  Text('Recettes :  ' + data['numberPost'].toString(),
-                                    style: GoogleFonts.poppins( textStyle: const TextStyle(color: black,fontSize: 13,letterSpacing: 1,decoration: TextDecoration.none)),),
-
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                    );
-                  }
-                  return const SpinKitRipple(color: primary, size: 20);
-                },
-              ),
-              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: GestureDetector(

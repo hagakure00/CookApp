@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cook/Models/comment.dart';
 import 'package:cook/Models/recette.dart';
 import 'package:cook/Models/profilUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +30,10 @@ Future deleteRecette(Recette recette) async {
   await FirebaseFirestore.instance.collection('UserRecette').doc(uid).update({
     'numberPost': FieldValue.increment(-1)});
 }
+Future deleteComment(Commentaire comment) async {
+  String uid = (FirebaseAuth.instance.currentUser!).uid;
+  FirebaseFirestore.instance.collection('CommentRecette').doc(comment.id).delete();
+}
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -52,6 +57,7 @@ Stream<List<Recette>> getPopularRecette() {
       .snapshots().map((snapshot) => snapshot.docs.map((doc) =>
       Recette.fromJson(doc.data(),doc.id)).toList());
 }
+
 
 // get recette categorie
 Stream<List<Recette>> getClassiqueRecetteAperitif(){
@@ -195,5 +201,6 @@ Stream<List<ProfilUser>> getUser() {
       .snapshots().map((snapshot) => snapshot.docs.map((doc) =>
       ProfilUser.fromJson(doc.data(),doc.id)).toList());
 }
+
 
 

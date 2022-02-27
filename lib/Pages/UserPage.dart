@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cook/Models/recette.dart';
 import 'package:cook/Service/Firebase.dart';
@@ -32,7 +33,7 @@ class _UserPageState extends State<UserPage> {
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
+      final image = await ImagePicker().pickImage(source: source,maxHeight:  200 , maxWidth: 200,imageQuality: 85,);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() => this.image = imageTemporary);
@@ -102,9 +103,22 @@ class _UserPageState extends State<UserPage> {
 
   Widget buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 5,
-      title: Text('CookBook ', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))));
+        backgroundColor: Colors.white,
+        elevation: 3,
+        title: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 250),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 35, child: Image.asset('assets/images/logobar.png')),
+              const SizedBox(width: 5),
+              Text('Cook', style: GoogleFonts.oswald( textStyle: const TextStyle(color: black, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+              const SizedBox(width: 2),
+              Text('Book', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+            ],
+          ),
+        )
+    );
   }
 
   Widget buildUserInfo() {
@@ -115,7 +129,7 @@ class _UserPageState extends State<UserPage> {
         if (snapshot.hasData) {
           var data = snapshot.data!.data();
           return SizedBox(
-              height: 100,
+              height: 80,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,14 +144,30 @@ class _UserPageState extends State<UserPage> {
                         },
                         child: Stack(
                           children: [
-                            CircleAvatar(
-                                radius: 40,
-                                backgroundColor: grey.withOpacity(0.2),
-                                backgroundImage: NetworkImage(data!['photoURL'])
-                                 ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                height: 70,
+                                width: 70,
+                                child: CachedNetworkImage(
+                                  imageUrl: data!['photoURL'],fit: BoxFit.cover,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      const SpinKitRipple(color: primary, size: 20),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                ),
+                              ),
+                            ),
+                            // CircleAvatar(
+                            //     radius: 35,
+                            //     backgroundColor: grey.withOpacity(0.2),
+                            //     backgroundImage: NetworkImage(data!['photoURL'])
+                            //      ),
                             const Positioned(
-                                bottom: 0,
-                                right: 0,
+                                bottom: 5,
+                                right: 5,
                                 child: Icon(Icons.camera_alt_rounded, color: primary,size: 20))
                           ],
                         )
@@ -210,7 +240,7 @@ class _UserPageState extends State<UserPage> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const SizedBox(height: 5),
+                                          const SizedBox(height: 10),
                                           SizedBox(
                                              width: size.width -190,
                                               child: Text(data.name, style: GoogleFonts.poppins( textStyle: const TextStyle(color: black, fontSize: 16,letterSpacing: 1,fontWeight: FontWeight.w400, decoration: TextDecoration.none)),overflow: TextOverflow.ellipsis)),

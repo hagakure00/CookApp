@@ -60,8 +60,20 @@ class _HomePageState extends State<HomePage> {
   Widget buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      elevation: 5,
-      title: Text('CookBook', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+      elevation: 3,
+      title: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 250),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 35, child: Image.asset('assets/images/logobar.png')),
+            const SizedBox(width: 5),
+            Text('Cook', style: GoogleFonts.oswald( textStyle: const TextStyle(color: black, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+            const SizedBox(width: 2),
+            Text('Book', style: GoogleFonts.oswald( textStyle: const TextStyle(color: primary, fontSize: 20,letterSpacing: 1,decoration: TextDecoration.none))),
+          ],
+        ),
+      )
     );
   }
  Widget buildListRecetteRecent(context) {
@@ -86,7 +98,8 @@ class _HomePageState extends State<HomePage> {
                         souscategory: data.sousCategorie,
                         time: data.time,
                         like: data.like.toString(),
-                        image: data.imageURL
+                        image: data.imageURL,
+                        comment: data.comment.toString(),
                     )
                 );
               },
@@ -118,7 +131,8 @@ class _HomePageState extends State<HomePage> {
                         souscategory: data.sousCategorie,
                         time: data.time,
                         like: data.like.toString(),
-                        image: data.imageURL
+                        image: data.imageURL,
+                      comment: data.comment.toString(),
                     )
                 );
               },
@@ -150,7 +164,8 @@ class _HomePageState extends State<HomePage> {
                         souscategory: data.sousCategorie,
                         time: data.time,
                         like: data.like.toString(),
-                        image: data.imageURL
+                        image: data.imageURL,
+                      comment: data.comment.toString(),
                     )
                 );
               },

@@ -1,11 +1,12 @@
 import 'package:cook/Theme/colors.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
 
 class CardRecette extends StatefulWidget {
-  const CardRecette({Key? key, required this.name, required this.auteur, required this.category, required this.souscategory, required this.time, required this.like, required this.image}) : super(key: key);
+  const CardRecette({Key? key,required this.comment, required this.name, required this.auteur, required this.category, required this.souscategory, required this.time, required this.like, required this.image}) : super(key: key);
 
   final String name;
   final String auteur;
@@ -14,6 +15,7 @@ class CardRecette extends StatefulWidget {
   final String time;
   final String like;
   final String image;
+  final String comment;
 
   @override
   _CardRecetteState createState() => _CardRecetteState();
@@ -119,10 +121,22 @@ class _CardRecetteState extends State<CardRecette> {
                     right: 10,
                     child: Row(
                       children: [
-                        const Icon(Ionicons.heart, color: primary ,size: 16),
-                        const SizedBox(width: 5),
-                        Text(widget.like.toString(),
+                         Text(widget.like.toString(),
                           style: GoogleFonts.poppins( textStyle: const TextStyle(color: white,fontSize: 13,letterSpacing: 1,decoration: TextDecoration.none)),),
+                        const SizedBox(width: 8),
+                        const Icon(Ionicons.heart, color: primary ,size: 16),
+                      ],
+                    )
+                ),
+                Positioned(
+                    top: 40,
+                    right: 10,
+                    child: Row(
+                      children: [
+                        Text(widget.comment,
+                          style: GoogleFonts.poppins( textStyle: const TextStyle(color: white,fontSize: 13,letterSpacing: 1,decoration: TextDecoration.none)),),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.messenger, color: primary ,size: 16),
                       ],
                     )
                 ),
