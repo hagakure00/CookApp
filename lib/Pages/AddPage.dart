@@ -62,7 +62,7 @@ class _AddPageState extends State<AddPage> {
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source,imageQuality: 85, maxHeight:  400 , maxWidth: 400);
+      final image = await ImagePicker().pickImage(source: source,imageQuality: 90, maxHeight:  400 , maxWidth: 400);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() => this.image = imageTemporary);

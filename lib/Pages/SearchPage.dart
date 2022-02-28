@@ -155,13 +155,6 @@ class _SearchPageState extends State<SearchPage> {
         setState(() {
           (searchController.text.isNotEmpty) ? isExecute = true : isExecute = false;
         });
-        // queryData(searchController.text).then((value) {
-        //  snapshotData = value;
-        //   snap = value;
-        //   setState(() {
-        //     (searchController.text.isNotEmpty) ? isExecute = true : isExecute = false;
-        //   });
-        // });
       },
     );
   }
@@ -184,7 +177,12 @@ class _SearchPageState extends State<SearchPage> {
                   child: SizedBox(
                     width: 100,
                     height: 100,
-                    child: Image.network(data.imageURL,fit: BoxFit.cover),
+                    child: CachedNetworkImage(
+                      imageUrl: data.imageURL,fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      const SpinKitRipple(color: primary, size: 20),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),

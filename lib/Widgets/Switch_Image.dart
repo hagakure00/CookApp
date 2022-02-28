@@ -40,9 +40,6 @@ StatelessWidget getImageIngredient(String ingredient) {
   }
 
 
-
-
-
   else {
     return const ImageIngredient(valueImage: "null");
   }

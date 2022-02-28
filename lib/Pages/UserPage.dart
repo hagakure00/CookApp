@@ -33,7 +33,7 @@ class _UserPageState extends State<UserPage> {
 
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source,maxHeight:  200 , maxWidth: 200,imageQuality: 85,);
+      final image = await ImagePicker().pickImage(source: source,maxHeight:  200 , maxWidth: 200,imageQuality: 90);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() => this.image = imageTemporary);
@@ -157,14 +157,9 @@ class _UserPageState extends State<UserPage> {
                                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                                       const SpinKitRipple(color: primary, size: 20),
                                   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                ),
+                                )
                               ),
                             ),
-                            // CircleAvatar(
-                            //     radius: 35,
-                            //     backgroundColor: grey.withOpacity(0.2),
-                            //     backgroundImage: NetworkImage(data!['photoURL'])
-                            //      ),
                             const Positioned(
                                 bottom: 5,
                                 right: 5,
@@ -233,7 +228,12 @@ class _UserPageState extends State<UserPage> {
                                         child: SizedBox(
                                           width: 100,
                                           height: 100,
-                                          child: Image.network(data.imageURL,fit: BoxFit.cover),
+                                          child: CachedNetworkImage(
+                                            imageUrl: data.imageURL,fit: BoxFit.cover,
+                                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                            const SpinKitRipple(color: primary, size: 20),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 10),

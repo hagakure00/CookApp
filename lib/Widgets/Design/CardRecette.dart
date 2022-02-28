@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cook/Theme/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -39,7 +41,12 @@ class _CardRecetteState extends State<CardRecette> {
                   child: SizedBox(
                     width: size.width -20,
                     height: 200,
-                    child: Image.network(widget.image,fit: BoxFit.cover),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.image,fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      const SpinKitRipple(color: primary, size: 20),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    ),
                   ),
                 ),
                 Positioned(
